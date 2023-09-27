@@ -1,2 +1,2 @@
-# currency_converter
-API built in python to provide real time currency exchange rates
+#Currency Converter 
+This is an api built with python and flask, and containerized with docker. The api provides real time currency conversion, and uses caching to prevent unneccessary requests which might result in a server crash. 
