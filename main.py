@@ -34,3 +34,21 @@ def convert_currency():
 if __name__ == '__main__':
     app.run(debug=True)
 
+# Add a route for getting a list of supported currencies
+@app.route('/currencies', methods=['GET'])
+def get_supported_currencies():
+    currencies = c.get_currencies()
+    return jsonify({"currencies": currencies}), 200
+
+# Error handling for invalid currency codes
+@app.errorhandler(ValueError)
+def handle_value_error(e):
+    return jsonify({"error": "Invalid currency code"}), 400
+
+# Error handling for other exceptions
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
