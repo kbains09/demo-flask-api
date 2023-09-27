@@ -13,11 +13,8 @@ COPY requirements.txt /app/
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Port 5000
-EXPOSE 5000
-
-# Define environment variable
-ENV NAME World
+# Expose port 8080 (or the port you want to use) for the Flask app
+EXPOSE 8080
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
