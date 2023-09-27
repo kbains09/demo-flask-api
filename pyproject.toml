@@ -11,6 +11,7 @@ forex-python = "^1.8"
 flask = "^2.3.3"
 flask-testing = "^0.8.1"
 flask-limiter = "^3.5.0"
+prometheus-client = "^0.17.1"
 
 
 [build-system]
