@@ -1,11 +1,23 @@
 from flask import Flask, request, jsonify
 from forex_python.converter import CurrencyRates
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from forex_converter import CurrencyConverter
 
 app = Flask(__name__)
 c = CurrencyRates()
 
+# Configure rate limiting
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    storage_uri="memory://",  # In-memory storage, you can choose a different one
+    default_limits=["5 per minute", "20 per hour"],  # Adjust as needed
+)
+
 # Route to convert currency
 @app.route('/convert', methods=['GET'])
+@limiter.limit("5 per minute")  # Adjust the limit as needed
 def convert_currency():
     try:
         from_currency = request.args.get('from')
@@ -31,11 +43,9 @@ def convert_currency():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-# Add a route for getting a list of supported currencies
+# Add a route for getting a list of supported currencies with rate limiting
 @app.route('/currencies', methods=['GET'])
+@limiter.limit("10 per minute")  # Adjust the limit as needed
 def get_supported_currencies():
     currencies = c.get_currencies()
     return jsonify({"currencies": currencies}), 200
